@@ -26,14 +26,14 @@ const ArchitectureView: React.FC = () => {
       </div>
 
       {/* Visual Diagram Placeholder */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/5 blur-3xl rounded-full" />
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 overflow-hidden relative group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 blur-3xl rounded-full group-hover:bg-sky-500/10 transition-colors duration-1000" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/5 blur-3xl rounded-full group-hover:bg-indigo-500/10 transition-colors duration-1000" />
 
         <div className="relative flex flex-col items-center gap-12">
           {/* Top Tier: Frontend */}
           <div className="flex flex-col items-center">
-            <div className="bg-white/5 border border-white/10 px-8 py-4 rounded-2xl flex items-center gap-4 backdrop-blur-md">
+            <div className="bg-white/5 border border-white/10 px-8 py-4 rounded-2xl flex items-center gap-4 backdrop-blur-md shadow-xl hover:border-white/20 transition-all cursor-default">
               <Globe className="text-sky-400" />
               <div>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Global Edge</p>
@@ -44,18 +44,19 @@ const ArchitectureView: React.FC = () => {
           </div>
 
           {/* Middle Tier: Control Plane */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
-            <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl text-center space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl relative">
+            <div className="absolute inset-0 bg-sky-500/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl text-center space-y-4 hover:border-indigo-500/30 transition-all z-10">
               <ShieldCheck className="mx-auto text-indigo-400" size={32} />
               <h4 className="text-white font-bold">Identity & Auth</h4>
               <p className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">Firebase Auth + RBAC</p>
             </div>
-            <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl text-center space-y-4 ring-2 ring-sky-500/20 shadow-2xl shadow-sky-500/5">
+            <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl text-center space-y-4 ring-2 ring-sky-500/20 shadow-2xl shadow-sky-500/5 z-10 hover:ring-sky-500/40 transition-all">
               <Cloud className="mx-auto text-sky-400" size={32} />
               <h4 className="text-white font-bold">Control API</h4>
               <p className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">Node.js Cloud Functions</p>
             </div>
-            <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl text-center space-y-4">
+            <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl text-center space-y-4 hover:border-yellow-500/30 transition-all z-10">
               <Smartphone className="mx-auto text-yellow-400" size={32} />
               <h4 className="text-white font-bold">MoMo Payments</h4>
               <p className="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">MTN MoMo Integration</p>
@@ -78,7 +79,7 @@ const ArchitectureView: React.FC = () => {
               { loc: 'ACCRA', code: 'GH-01' },
               { loc: 'NAIROBI', code: 'KE-01' }
             ].map((node) => (
-              <div key={node.code} className="bg-slate-800/40 border border-slate-700/50 p-4 rounded-xl text-center">
+              <div key={node.code} className="bg-slate-800/40 border border-slate-700/50 p-4 rounded-xl text-center hover:bg-slate-800/60 hover:border-emerald-500/30 transition-all cursor-default">
                 <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg w-fit mx-auto mb-3">
                   <Cpu size={20} />
                 </div>
@@ -92,8 +93,8 @@ const ArchitectureView: React.FC = () => {
 
       {/* Design Principles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
+        <div className="bg-slate-900/40 p-6 rounded-2xl border border-slate-800/50 hover:border-sky-500/20 transition-all">
+          <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-sky-500/10 text-sky-400 rounded-lg">
               <Layers size={20} />
             </div>
@@ -104,8 +105,8 @@ const ArchitectureView: React.FC = () => {
             It receives JSON tasks from the Cloud Functions and translates them into system commands.
           </p>
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
+        <div className="bg-slate-900/40 p-6 rounded-2xl border border-slate-800/50 hover:border-indigo-500/20 transition-all">
+          <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg">
               <Lock size={20} />
             </div>
@@ -116,8 +117,8 @@ const ArchitectureView: React.FC = () => {
             Users never get root access, drastically reducing the attack surface.
           </p>
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
+        <div className="bg-slate-900/40 p-6 rounded-2xl border border-slate-800/50 hover:border-emerald-500/20 transition-all">
+          <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg">
               <Zap size={20} />
             </div>

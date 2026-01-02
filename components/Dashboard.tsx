@@ -41,6 +41,24 @@ const StatCard = ({ label, value, icon: Icon, color, trend }: any) => (
   </div>
 );
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-950 border border-slate-800 p-3 rounded-xl shadow-2xl backdrop-blur-md">
+        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">{label}</p>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.5)]" />
+          <p className="text-sm font-mono text-white">
+            <span className="font-bold text-sky-400">{payload[0].value}</span>
+            <span className="ml-1 text-slate-400 text-xs">req/s</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 const Dashboard: React.FC = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -69,28 +87,63 @@ const Dashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-lg font-bold text-white">Aggregated Traffic</h3>
-              <p className="text-xs text-slate-500">Across all VPS worker nodes</p>
+              <p className="text-xs text-slate-500">Across all VPS worker nodes (Requests/s)</p>
             </div>
-            <select className="bg-slate-800 border-none rounded-lg text-xs px-3 py-2 text-slate-300 outline-none">
+            <select className="bg-slate-800 border-none rounded-lg text-xs px-3 py-2 text-slate-300 outline-none cursor-pointer hover:bg-slate-700 transition-colors">
               <option>Last 24 Hours</option>
               <option>Last 7 Days</option>
             </select>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data}>
+              <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorLoad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
                     <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="time" stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px' }}
-                  itemStyle={{ color: '#0ea5e9' }}
+                <CartesianGrid 
+                  strokeDasharray="3 3" 
+                  vertical={false} 
+                  stroke="#1e293b" 
+                  opacity={0.5}
                 />
-                <Area type="monotone" dataKey="load" stroke="#0ea5e9" fillOpacity={1} fill="url(#colorLoad)" strokeWidth={3} />
+                <XAxis 
+                  dataKey="time" 
+                  stroke="#475569" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false}
+                  dy={10}
+                />
+                <YAxis 
+                  stroke="#475569" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false}
+                  dx={-10}
+                />
+                <Tooltip 
+                  content={<CustomTooltip />}
+                  cursor={{ stroke: '#334155', strokeWidth: 2, strokeDasharray: '4 4' }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="load" 
+                  stroke="#0ea5e9" 
+                  fillOpacity={1} 
+                  fill="url(#colorLoad)" 
+                  strokeWidth={3}
+                  activeDot={{ 
+                    r: 6, 
+                    stroke: '#0f172a', 
+                    strokeWidth: 2, 
+                    fill: '#0ea5e9',
+                    className: "filter drop-shadow-[0_0_8px_rgba(14,165,233,0.8)]"
+                  }}
+                  animationDuration={1500}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
