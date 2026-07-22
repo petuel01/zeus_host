@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  zeus-frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_BASE_URL=http://localhost:8000/api
+    restart: unless-stopped
+    networks:
+      - zeus-network
+
+  # Optional: Backend for development
+  # zeus-backend-dev:
+  #   build:
+  #     context: ../zeus-backend
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ../zeus-backend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DATABASE_URL=postgresql://zeus:password@postgres:5432/zeus_db
+  #   restart: unless-stopped
+  #   networks:
+  #     - zeus-network
+  #   depends_on:
+  #     - redis
+  #     - postgres
+
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - zeus-network
+
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     - POSTGRES_DB=zeus_db
+  #     - POSTGRES_USER=zeus
+  #     - POSTGRES_PASSWORD=password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   networks:
+  #     - zeus-network
+
+networks:
+  zeus-network:
+    driver: bridge
+
+# volumes:
+#   postgres-data:

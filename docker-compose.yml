@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  zeus-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_BASE_URL=${API_BASE_URL:-http://localhost:8000/api}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - zeus-network
+    labels:
+      - "com.zeus.description=Zeus Hosting Frontend"
+
+  # Optional: Include backend API service
+  # zeus-backend:
+  #   build:
+  #     context: ../zeus-backend  # If backend is in separate repo
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - DATABASE_URL=${DATABASE_URL}
+  #     - REDIS_URL=${REDIS_URL}
+  #   restart: unless-stopped
+  #   networks:
+  #     - zeus-network
+  #   depends_on:
+  #     - redis
+  #     - postgres
+
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis-data:/data
+  #   networks:
+  #     - zeus-network
+  #   restart: unless-stopped
+
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     - POSTGRES_DB=${DB_NAME}
+  #     - POSTGRES_USER=${DB_USER}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   networks:
+  #     - zeus-network
+  #   restart: unless-stopped
+
+networks:
+  zeus-network:
+    driver: bridge
+
+# volumes:
+#   redis-data:
+#   postgres-data:
